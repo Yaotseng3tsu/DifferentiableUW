@@ -1,0 +1,38 @@
+# ===== 不上传的内容 =====
+
+# 虚拟环境（很大，绝不提交）
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# NVIDIA Warp 内核缓存
+warp_cache/
+.warp/
+
+# 内部/未发表材料（幻灯片、演讲稿、创新点文档）—— 保持私有，不分享
+docs/
+
+# 本地 Claude Code 设置
+.claude/
+
+# 大型原始实验数据（保留 results/ 下的小结果 CSV）
+data/*
+!data/.gitkeep
+*.npz
+*.mp4
+
+# IDE / OS / 临时锁文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+~$*
+*.tmp
+
+# ===== 会上传的内容（说明，非语法）=====
+# src/  scripts/  notebooks/  tests/  results/(含 data/*.csv)  pic/*.png
+# README.md  GETTING_STARTED.md  requirements.txt

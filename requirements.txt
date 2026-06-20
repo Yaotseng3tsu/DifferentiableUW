@@ -1,0 +1,12 @@
+# 核心依赖 —— 在激活的虚拟环境中执行 `pip install -r requirements.txt`
+#
+# warp-lang: NVIDIA Warp，可微分 GPU kernel 框架（PyPI wheel 内置 CUDA 12.9 运行时）。
+#            如需 CUDA 13.0 构建，请改从 GitHub Releases 下载对应 wheel。
+warp-lang>=1.6
+numpy>=1.24
+matplotlib>=3.7
+
+# 可选（后续阶段再装）：
+# usd-core        # 读写 USD 场景，用于将来与 OceanSim/Isaac 的桥接
+# trimesh         # 网格 IO / 碰撞
+# scipy           # L-BFGS 等优化器（Phase 4 可选）
