@@ -89,12 +89,28 @@ results/     quantitative results and data
 pic/         figures
 ```
 
-## Status and roadmap
+## Status
 
 The 3-DOF differentiable model, parameter identification, and the inverse-disturbance
-solver are implemented and validated on synthetic data. Next steps are validation on
-real experimental data (towing and free-running trials with trajectory and IMU
-measurements) and the extension to a fully coupled 6-DOF model.
+solver are implemented and validated on synthetic data.
+
+## Future plan
+
+Near term:
+
+- **Validation on real experimental data.** Towing trials — constant-velocity runs to
+  isolate hydrodynamic drag, and accelerating/oscillatory runs to excite the added-mass
+  terms — together with free-running trials, using camera-tracked trajectories and
+  onboard IMU. Identified parameters are compared against the differentiable estimates
+  and against classically computed hydrodynamic values.
+- **Extension to a fully coupled 6-DOF model.** Adding heave, roll and pitch, the
+  gravity/buoyancy restoring forces, and a quaternion-based attitude representation to
+  avoid Euler-angle singularities, reusing the existing differentiable pipeline.
+
+Long term:
+
+- Integrating the differentiable dynamics into NVIDIA Isaac Sim for high-fidelity rendering.
+- Coupling with a differentiable sonar model toward an end-to-end perception-to-action pipeline.
 
 ## References
 
