@@ -22,6 +22,7 @@
 | E5 | 4.2 | 噪声鲁棒性 Robustness to measurement noise | 误差随 σ 单调上升、有界 | robustness.png |
 | E6 | 4.3 | 恒定水流反算 Constant current inversion | U 精确恢复, loss→1e-16 | recover_disturbance_const.png |
 | E7 | 4.3 | 时变水流反算 Time-varying current inversion | 中段好/末端失真, RMSE 0.24N | recover_disturbance_timevarying.png |
+| E8 | 5.3-5.4 | 6-DOF 梯度门禁 + 参数辨识 6-DOF gate + identification | 门禁 18/18 通过; 辨识误差 1.38% | identify_params6_convergence.png |
 
 ---
 
@@ -143,6 +144,32 @@ Adam (lr=0.02, 3000 it)；初值 = 真值×0.5。
 
 ---
 
+## E8 — 6-DOF 梯度门禁 + 参数辨识 / 6-DOF gate + identification (Phase 5.3-5.4)
+**设置 / Setup**: 完整 3D 6-DOF Fossen（四元数姿态 + 恢复力，块对角 M, r_g=0）。
+门禁：激发全 6 轴的机动，解析梯度 vs 有限差分。
+辨识：固定可测参数(m, 惯量, W, B, zb)，辨识 18 个（附加质量6 + 线性阻尼6 + 二次阻尼6）；
+无量纲化(/SCALE6)；丰富机动 surge/sway/heave/roll/pitch/yaw, T=120；Adam(lr=0.02, 2500 it)；初值×0.5。
+
+**门禁 / Gate**: 18/18 参数解析梯度 ≈ 有限差分（联合容差），`tests/test_gradients6.py` 通过。
+**辨识收敛 / Convergence**: 平均相对误差 50% → **1.38%**；loss 3.3 → ~1e-6。
+
+| param | true | identified | rel.err |
+|-------|-----:|-----------:|--------:|
+| Xud (附加质量) | 5.50 | 5.507 | 0.1% |
+| Yvd | 12.70 | 12.703 | 0.0% |
+| Zwd | 14.60 | 14.600 | 0.0% |
+| Nrd (附加惯量) | 0.120 | 0.120 | 0.1% |
+| Xu (线性阻尼) | 4.00 | 4.110 | 2.7% |
+| Zw | 5.00 | 5.274 | 5.5% |
+| Zww (二次阻尼) | 36.0 | 34.35 | 4.6% |
+| Nrr | 1.50 | 1.496 | 0.3% |
+
+**图 / Figure**: [pic/identify_params6_convergence.png](../pic/identify_params6_convergence.png)
+**结论 / Takeaway**: 6-DOF 可微管线（含四元数运动学 + 恢复力）验证通过。附加质量恢复极准；
+升沉阻尼 Zw/Zww 误差略大(~5%)，因 heave 激励段较短（可观测性/实验设计 A2）。
+
+---
+
 ## 已保存图片清单 / Saved figures
 | 文件 / file | 内容 / content | 来源 / from |
 |------|------|------|
@@ -150,6 +177,7 @@ Adam (lr=0.02, 3000 it)；初值 = 真值×0.5。
 | pic/robustness.png | 初值/噪声鲁棒性 | E4,E5 / Phase 4.2 |
 | pic/recover_disturbance_const.png | 恒定水流反算收敛 | E6 / Phase 4.3 |
 | pic/recover_disturbance_timevarying.png | 时变水流 U(t) 反算 | E7 / Phase 4.3 |
+| pic/identify_params6_convergence.png | 6-DOF 参数辨识收敛 | E8 / Phase 5.4 |
 | pic/optimizer_gd_vs_adam.png | GD vs Adam 路径对比(示意) | 教学图 |
 | pic/integrators_euler_vs_rk4.png | 欧拉 vs RK4 采样斜率(示意) | 教学图 |
 | forward_3dof.png (根目录) | 3-DOF 前向轨迹(转弯机动) | Phase 2.4 |
